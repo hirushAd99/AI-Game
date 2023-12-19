@@ -1,58 +1,66 @@
 import random
 
-hidden_number = None
-user_guess = None
+NUMBER_LENGTH = 4
 
-def welcome_screen():
-    print("Welcome to the 4Jerries Game!")
+class FourJerriesGame:
+    def __init__(self):
+        self.hidden_number = None
+        self.user_guess = None
 
-def generate_hidden_number():
-    global hidden_number
-    hidden_number = str(random.randint(1000, 9999))
+    #Welcome screen at start of the game & rules.
+    def welcome_screen(self):
+        print("Welcome to the 4Jerries Game!\n")
+        print("Rules.\nEvery number in wrong place you get a Tom.\nEvery right place you get Jerry.\nIf you get 4 Jerries you will win.\n")
 
-def validate_hidden_number():
-    # Add validation logic if needed
-    pass
+    #Generate the hidden number.
+    def generate_hidden_number(self):
+        digits = [str(i) for i in range(10)]
+        self.hidden_number = ''.join(random.sample(digits, NUMBER_LENGTH))
 
-def player_guess():
-    global user_guess
-    user_guess = input("Enter a 4-digit number: ")
+    #Take user input for the check number.
+    def get_user_guess(self):
+        while True:
+            user_input = input(f"Enter a {NUMBER_LENGTH}-digit number: ")
+            if self.validate_user_guess(user_input):
+                self.user_guess = user_input
+                break
+            else:
+                print("Invalid input. Please enter a valid 4-digit number.")
+    #Validate the user input.
+    def validate_user_guess(self, user_input):
+        if not user_input.isdigit() or len(user_input) != NUMBER_LENGTH:
+            return False
+        return True
 
-def validate_user_guess():
-    # Add validation logic if needed
-    pass
+    #Check the user input and hidden number is matching or not.
+    def is_correct_guess(self):
+        return self.user_guess == self.hidden_number
 
-def count_jerries_toms():
-    jerrys = 0
-    toms = 0
-    for i in range(4):
-        if user_guess[i] == hidden_number[i]:
-            jerrys += 1
-        elif user_guess[i] in hidden_number:
-            toms += 1
-    return jerrys, toms
+    #Count the jerry and tom. 
+    def count_jerries_toms(self):
+        jerrys = sum(1 for i in range(len(self.user_guess)) if self.user_guess[i] == self.hidden_number[i])
+        toms = NUMBER_LENGTH - jerrys
+        return jerrys, toms
 
-def display_result(jerrys, toms):
-    print(f"{jerrys} Jerry, {toms} Tom")
+    #Display the result correct or wrong
+    def display_result(self, jerrys, toms):
+        print(f"{jerrys} Jerry, {toms} Tom")
+        print(self.hidden_number)
 
-def main():
-    welcome_screen()
-    generate_hidden_number()
+    def play_game(self):
+        self.welcome_screen()
+        self.generate_hidden_number()
+        while True:
+            self.get_user_guess()
 
-    attempts = 0
-    while True:
-        player_guess()
-        validate_user_guess()
+            if self.is_correct_guess():
+                print("Congratulations! You guessed the correct number.")
+                break
 
-        if user_guess == hidden_number:
-            print(f"Congratulations! You guessed the correct number in {attempts} attempts.")
-            break
+            jerrys, toms = self.count_jerries_toms()
+            self.display_result(jerrys, toms)
 
-        jerrys, toms = count_jerries_toms()
-        display_result(jerrys, toms)
 
-        attempts += 1
-
-#Main function.
 if __name__ == "__main__":
-    main()
+    game = FourJerriesGame()
+    game.play_game()
