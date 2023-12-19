@@ -53,5 +53,6 @@ def main():
 
         attempts += 1
 
+#Main function.
 if __name__ == "__main__":
     main()
