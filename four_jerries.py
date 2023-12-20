@@ -26,6 +26,7 @@ class FourJerriesGame:
                 break
             else:
                 print("Invalid input. Please enter a valid 4-digit number.")
+
     #Validate the user input.
     def validate_user_guess(self, user_input):
         if not user_input.isdigit() or len(user_input) != NUMBER_LENGTH:
@@ -42,11 +43,11 @@ class FourJerriesGame:
         toms = NUMBER_LENGTH - jerrys
         return jerrys, toms
 
-    #Display the result correct or wrong
+    #Display the result correct or wrong.
     def display_result(self, jerrys, toms):
         print(f"{jerrys} Jerry, {toms} Tom")
-        print(self.hidden_number)
 
+    #Main function with all other functions.
     def play_game(self):
         self.welcome_screen()
         self.generate_hidden_number()
